@@ -6,7 +6,7 @@ An advanced prompt engineering mini-project demonstrating how to build a robust,
 
 ## 🧠 Overview
 
-This project showcases a fundamental agentic workflow using a declarative JSON configuration (`pipeline.json`) and an execution script (`run_pipeline.py`). It is designed to take raw user constraints (destination, budget, interests) and process them through a rigorous reasoning pipeline to generate logically routed travel itineraries.
+This project showcases a fundamental agentic workflow using a declarative JSON configuration (`app.json`) and an execution script (`app.py`). It is designed to take raw user constraints (destination, budget, interests) and process them through a rigorous reasoning pipeline to generate logically routed travel itineraries.
 
 ## ⚙️ Pipeline Architecture
 
