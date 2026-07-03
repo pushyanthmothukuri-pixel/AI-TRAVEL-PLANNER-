@@ -1,0 +1,65 @@
+{
+  "project": "Enterprise Prompt Portfolio",
+  "selected_topic": "AI Travel Planner",
+  "pipeline_stages": {
+    "step_1": {
+      "title": "Role & Context",
+      "objective": "Generate core requirements.",
+      "prompt_design": "You are an expert AI Travel Planner. Your role is to create highly optimized, logically routed, and personalized travel itineraries based on user constraints such as budget, travel dates, and personal interests. You must prioritize realistic travel times between locations and ensure all recommendations fit within the specified budget."
+    },
+    "step_2": {
+      "title": "Few-Shot",
+      "objective": "Establish input/output patterns.",
+      "examples": [
+        {
+          "input": "I need a 2-day itinerary for Tokyo focusing on food and anime, with a high budget.",
+          "output": "Day 1: Sushi breakfast at Tsukiji Outer Market, followed by exploring Akihabara's anime stores. Dinner at a high-end Omakase in Ginza. Day 2: Morning visit to the Ghibli Museum (pre-booked), afternoon cafe hopping in Harajuku. Dinner at an exclusive Kobe beef teppanyaki restaurant."
+        },
+        {
+          "input": "Plan a 1-day budget trip to Rome focusing on history.",
+          "output": "Day 1: Start early at the Colosseum and Roman Forum using a combined ticket. Grab a quick pizza al taglio for lunch. Spend the afternoon viewing the Pantheon (free entry) and walking to the Trevi Fountain."
+        }
+      ]
+    },
+    "step_3": {
+      "title": "Structured Outputs",
+      "objective": "Force machine-readable constraints.",
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "destination": { "type": "string" },
+          "total_budget_estimated": { "type": "number" },
+          "itinerary": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "day": { "type": "integer" },
+                "locations": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              },
+              "required": ["day", "locations"]
+            }
+          }
+        },
+        "required": ["destination", "total_budget_estimated", "itinerary"]
+      }
+    },
+    "step_4": {
+      "title": "Chain-of-Thought",
+      "objective": "Expose step-by-step reasoning logic.",
+      "prompt_design": "Before outputting the final itinerary, think step-by-step using <thinking> tags. \n1. First, analyze the user's budget and number of days. \n2. Second, list out the top attractions that match their stated interests. \n3. Third, group these attractions by geographic proximity to minimize transit time. \n4. Finally, allocate these groups to specific days, ensuring a realistic pace."
+    },
+    "step_5": {
+      "title": "Multi-Step Chaining",
+      "objective": "Link into a continuous pipeline.",
+      "pipeline_architecture": {
+        "node_1_extraction": "Parse the user's raw text input to extract Destination, Dates, Budget, and Interests into a standard JSON payload.",
+        "node_2_reasoning": "Pass the JSON payload to a Chain-of-Thought agent to draft a day-by-day geographical routing plan.",
+        "node_3_formatting": "Pass the drafted routing plan to a final agent constrained by the Structured Output schema (from Step 3) to deliver the final user-facing JSON response."
+      }
+    }
+  }
+}
